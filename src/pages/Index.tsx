@@ -6,6 +6,7 @@ import { Section, SectionHeader } from '@/components/Section';
 import { MetricCard } from '@/components/MetricCard';
 import { FeatureCard } from '@/components/FeatureCard';
 import { ProjectCard } from '@/components/ProjectCard';
+import { FlowingLines } from '@/components/FlowingLines';
 import { Button } from '@/components/ui/button';
 import { fadeInUp, staggerContainer, staggerItem, viewportConfig, defaultTransition } from '@/lib/animations';
 
@@ -76,6 +77,9 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Flowing lines between Hero and Currently Building */}
+      <FlowingLines variant="wave" />
+
       {/* Currently Building */}
       <Section background="subtle">
         <motion.div
@@ -114,6 +118,9 @@ const Index = () => {
         </motion.div>
       </Section>
 
+      {/* Flowing lines between Currently Building and How I Work */}
+      <FlowingLines variant="curve" flip />
+
       {/* How I Work */}
       <Section>
         <SectionHeader
@@ -145,6 +152,9 @@ const Index = () => {
           />
         </div>
       </Section>
+
+      {/* Flowing lines between How I Work and Featured Projects */}
+      <FlowingLines variant="zigzag" />
 
       {/* Featured Projects */}
       <Section background="subtle">
@@ -206,6 +216,9 @@ const Index = () => {
           </Link>
         </motion.div>
       </Section>
+
+      {/* Flowing lines between Featured Projects and Building in Public */}
+      <FlowingLines variant="wave" flip />
 
       {/* Building in Public */}
       <Section>
