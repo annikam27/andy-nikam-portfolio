@@ -1,11 +1,12 @@
 import { motion } from 'framer-motion';
 import { ReactNode } from 'react';
 import { fadeInUp, viewportConfig, defaultTransition } from '@/lib/animations';
+import { SectionBackground, GrainOverlay } from '@/components/BackgroundEffects';
 
 interface SectionProps {
   children: ReactNode;
   className?: string;
-  background?: 'white' | 'subtle' | 'dots';
+  background?: 'white' | 'subtle' | 'dots' | 'mesh' | 'diagonal';
   id?: string;
 }
 
@@ -13,12 +14,21 @@ export const Section = ({ children, className = '', background = 'white', id }: 
   const bgClasses = {
     white: 'bg-background',
     subtle: 'bg-secondary/30',
-    dots: 'bg-background dot-pattern'
+    dots: 'bg-background',
+    mesh: 'bg-background',
+    diagonal: 'bg-secondary/20'
   };
 
   return (
-    <section id={id} className={`py-20 md:py-32 ${bgClasses[background]} ${className}`}>
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+    <section id={id} className={`relative py-20 md:py-32 ${bgClasses[background]} ${className}`}>
+      {/* Background effects */}
+      {background === 'dots' && <div className="absolute inset-0 dot-pattern opacity-50" />}
+      {background === 'mesh' && <SectionBackground variant="mesh" />}
+      {background === 'diagonal' && <SectionBackground variant="diagonal" />}
+      {background === 'white' && <GrainOverlay />}
+      {background === 'subtle' && <SectionBackground variant="gradient" />}
+      
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
         {children}
       </div>
     </section>

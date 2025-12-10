@@ -7,6 +7,7 @@ import { MetricCard } from '@/components/MetricCard';
 import { FeatureCard } from '@/components/FeatureCard';
 import { ProjectCard } from '@/components/ProjectCard';
 import { FlowingLines } from '@/components/FlowingLines';
+import { MeshGradient, FloatingOrbs } from '@/components/BackgroundEffects';
 import { Button } from '@/components/ui/button';
 import { fadeInUp, staggerContainer, staggerItem, viewportConfig, defaultTransition } from '@/lib/animations';
 
@@ -14,8 +15,15 @@ const Index = () => {
   return (
     <Layout>
       {/* Hero Section */}
-      <section className="relative min-h-[90vh] flex items-center justify-center dot-pattern overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background" />
+      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
+        {/* Mesh gradient background */}
+        <MeshGradient />
+        
+        {/* Floating orbs */}
+        <FloatingOrbs />
+        
+        {/* Fade to next section */}
+        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-background to-transparent" />
         
         <div className="relative max-w-7xl mx-auto px-6 lg:px-8 py-20 text-center">
           <motion.div
