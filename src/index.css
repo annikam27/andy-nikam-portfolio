@@ -103,4 +103,30 @@
   .text-balance {
     text-wrap: balance;
   }
+
+  /* Flowing line animations */
+  .animate-flow {
+    stroke-dasharray: 12 6;
+    animation: flow 25s linear infinite;
+  }
+
+  .animate-flow-reverse {
+    stroke-dasharray: 8 4;
+    animation: flow-reverse 20s linear infinite;
+  }
+
+  .animate-flow-slow {
+    stroke-dasharray: 15 8;
+    animation: flow 35s linear infinite;
+  }
+}
+
+@keyframes flow {
+  0% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: -100; }
+}
+
+@keyframes flow-reverse {
+  0% { stroke-dashoffset: -100; }
+  100% { stroke-dashoffset: 0; }
 }
