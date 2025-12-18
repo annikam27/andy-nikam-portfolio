@@ -3,9 +3,8 @@ import { Brain, Database, BarChart3, Users, Lightbulb, Target, Rocket, CheckCirc
 import { Layout } from '@/components/Layout';
 import { Section, SectionHeader } from '@/components/Section';
 import { MetricCard } from '@/components/MetricCard';
-import { FeatureCard } from '@/components/FeatureCard';
-import { fadeInUp, staggerContainer, staggerItem, viewportConfig, defaultTransition } from '@/lib/animations';
-
+import ProductFlowDiagram from '@/components/ProductFlowDiagram';
+import { staggerContainer, staggerItem, viewportConfig } from '@/lib/animations';
 const principles = [
   { icon: Target, title: 'Outcome-Focused', description: 'Obsessed with impact, not output' },
   { icon: Users, title: 'User-Centric', description: 'Deep empathy drives every decision' },
@@ -41,6 +40,16 @@ const ProductManagement = () => {
               A systematic approach to building products that create lasting value. 
               Combining domain agility, data-driven decisions, and a builder's mindset.
             </p>
+          </motion.div>
+
+          {/* Product Flow Diagram */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="mt-12"
+          >
+            <ProductFlowDiagram />
           </motion.div>
         </div>
       </section>
