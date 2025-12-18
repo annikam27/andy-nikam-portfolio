@@ -60,7 +60,7 @@ const ProductFlowDiagram = () => {
       </div>
 
       {/* SVG connections */}
-      <svg className="absolute inset-0 w-full h-full" preserveAspectRatio="none">
+      <svg className="absolute inset-0 w-full h-full z-0" preserveAspectRatio="none">
         <defs>
           <linearGradient id="pm-connection-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
             <stop offset="0%" stopColor="hsl(217, 91%, 60%)" />
@@ -126,7 +126,7 @@ const ProductFlowDiagram = () => {
       {elements.map((el, i) => (
         <motion.div
           key={el.id}
-          className="absolute"
+          className="absolute z-10"
           style={{
             left: `${el.x}%`,
             top: `${el.y}%`,

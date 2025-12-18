@@ -46,7 +46,7 @@ const TechStackWeb = () => {
       </div>
 
       {/* Connection lines */}
-      <svg className="absolute inset-0 w-full h-full" preserveAspectRatio="xMidYMid meet">
+      <svg className="absolute inset-0 w-full h-full z-0" preserveAspectRatio="xMidYMid meet">
         <defs>
           <linearGradient id="tech-connection-active" x1="0%" y1="0%" x2="100%" y2="0%">
             <stop offset="0%" stopColor="hsl(217, 91%, 60%)" />
@@ -87,7 +87,7 @@ const TechStackWeb = () => {
       {techs.map((tech, i) => (
         <motion.div
           key={tech.id}
-          className="absolute cursor-pointer"
+          className="absolute z-10 cursor-pointer"
           style={{ left: `${tech.x}%`, top: `${tech.y}%`, transform: 'translate(-50%, -50%)' }}
           onHoverStart={() => setHoveredTech(tech.id)}
           onHoverEnd={() => setHoveredTech(null)}
