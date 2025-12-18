@@ -3,7 +3,8 @@ import { motion } from 'framer-motion';
 import { Layout } from '@/components/Layout';
 import { Section, SectionHeader } from '@/components/Section';
 import { ProjectCard } from '@/components/ProjectCard';
-import { fadeInUp, staggerContainer, viewportConfig, defaultTransition } from '@/lib/animations';
+import TechStackWeb from '@/components/TechStackWeb';
+import { staggerContainer } from '@/lib/animations';
 
 const filters = ['All', 'AI/ML', 'Fintech', 'Enterprise', 'Side Projects'];
 
@@ -96,6 +97,16 @@ const Portfolio = () => {
             <p className="text-xl text-muted-foreground leading-relaxed">
               A collection of products and features I've built across AI, fintech, and enterprise software.
             </p>
+          </motion.div>
+
+          {/* Tech Stack Web */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="mt-12 max-w-3xl mx-auto"
+          >
+            <TechStackWeb />
           </motion.div>
         </div>
       </section>
