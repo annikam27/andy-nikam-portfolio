@@ -1,16 +1,16 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Sparkles, LayoutGrid, TrendingUp, Play, Cpu, Brain, Zap } from 'lucide-react';
+import { ArrowRight, Sparkles, Play, Cpu, Brain, Zap } from 'lucide-react';
 import { Layout } from '@/components/Layout';
 import { Section, SectionHeader } from '@/components/Section';
 import { MetricCard } from '@/components/MetricCard';
-import { FeatureCard } from '@/components/FeatureCard';
 import { ProjectCard } from '@/components/ProjectCard';
 import { FlowingLines } from '@/components/FlowingLines';
 import { MeshGradient, FloatingOrbs } from '@/components/BackgroundEffects';
-import { SectionDivider, NumberedSection } from '@/components/VisualElements';
+import { SectionDivider } from '@/components/VisualElements';
 import { Button } from '@/components/ui/button';
 import { fadeInUp, staggerContainer, staggerItem, viewportConfig, defaultTransition } from '@/lib/animations';
+import InteractiveFlowDiagram from '@/components/InteractiveFlowDiagram';
 
 const Index = () => {
   return (
@@ -137,56 +137,9 @@ const Index = () => {
           subtitle="A systematic approach to transforming complex challenges into elegant solutions"
         />
         
-        {/* Numbered steps for mobile, cards for desktop */}
-        <div className="hidden md:grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-          <FeatureCard
-            icon={Sparkles}
-            title="From Chaos"
-            description="I thrive in ambiguous, undefined problem spaces where clarity is scarce and innovation is essential."
-            direction="left"
-            delay={0}
-          />
-          <FeatureCard
-            icon={LayoutGrid}
-            title="To Clarity"
-            description="Breaking down complexity into actionable roadmaps with clear milestones and measurable outcomes."
-            direction="up"
-            delay={0.1}
-          />
-          <FeatureCard
-            icon={TrendingUp}
-            title="With Impact"
-            description="$165M+ in revenue through data-driven decisions and relentless focus on user outcomes."
-            direction="right"
-            delay={0.2}
-          />
-        </div>
-
-        {/* Numbered sections for visual variety */}
-        <div className="md:hidden space-y-8">
-          <NumberedSection
-            number={1}
-            title="From Chaos"
-            description="I thrive in ambiguous, undefined problem spaces where clarity is scarce and innovation is essential."
-            delay={0}
-          />
-          <NumberedSection
-            number={2}
-            title="To Clarity"
-            description="Breaking down complexity into actionable roadmaps with clear milestones and measurable outcomes."
-            delay={0.1}
-          />
-          <NumberedSection
-            number={3}
-            title="With Impact"
-            description="$165M+ in revenue through data-driven decisions and relentless focus on user outcomes."
-            delay={0.2}
-          />
-        </div>
+        <InteractiveFlowDiagram />
       </Section>
 
-      {/* Section Divider */}
-      <SectionDivider symbol="◆" />
       {/* Section Divider */}
       <SectionDivider />
 
