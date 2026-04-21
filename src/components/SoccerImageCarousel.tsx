@@ -6,6 +6,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 interface CarouselImage {
   id: string;
   alt: string;
+  src?: string;
   description?: string;
 }
 
