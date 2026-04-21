@@ -6,6 +6,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 interface CarouselImage {
   id: string;
   alt: string;
+  src?: string;
   description?: string;
 }
 
@@ -30,7 +31,7 @@ export const SoccerImageCarousel = ({
 
   const onSelect = () => {
     if (!emblaApi) return;
-    setSelectedIndex(emblaApi.selectedIndex());
+    setSelectedIndex(emblaApi.selectedScrollSnap());
     setPrevBtnDisabled(!emblaApi.canScrollPrev());
     setNextBtnDisabled(!emblaApi.canScrollNext());
   };
