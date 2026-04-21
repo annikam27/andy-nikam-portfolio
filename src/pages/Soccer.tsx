@@ -4,6 +4,8 @@ import { Layout } from '@/components/Layout';
 import { Section, SectionHeader } from '@/components/Section';
 import { MetricCard } from '@/components/MetricCard';
 import { fadeInUp, staggerContainer, staggerItem, viewportConfig, defaultTransition } from '@/lib/animations';
+import SoccerImageCarousel from '@/components/SoccerImageCarousel';
+import { IMAGE_PATHS } from '@/lib/image-paths';
 
 const achievements = [
   { title: 'League Champions', year: '2023', description: 'Sunday League Division 2' },
@@ -183,33 +185,44 @@ const Soccer = () => {
         </motion.div>
       </Section>
 
-      {/* Gallery */}
+      {/* Match Day Gallery - Image Carousel */}
       <Section background="subtle">
-        <SectionHeader
+        <SoccerImageCarousel
           title="Match Day Gallery"
-          subtitle="Captured moments from games"
+          subtitle="Captured moments from games and team moments"
+          images={[
+            {
+              id: 'match-1',
+              alt: 'Player defending against attacker',
+              src: IMAGE_PATHS.soccer.match1,
+              description: 'One-on-one defensive play',
+            },
+            {
+              id: 'match-2',
+              alt: 'Two players competing for the ball',
+              src: IMAGE_PATHS.soccer.match2,
+              description: 'Midfield battle and control',
+            },
+            {
+              id: 'team-photo',
+              alt: 'Full soccer team photo',
+              src: IMAGE_PATHS.soccer.teamPhoto,
+              description: 'Team squad photo 2024',
+            },
+            {
+              id: 'match-3',
+              alt: 'Multiple players in action',
+              src: IMAGE_PATHS.soccer.match3,
+              description: 'Dynamic game action',
+            },
+            {
+              id: 'match-4',
+              alt: 'Player number 9 with the ball',
+              src: IMAGE_PATHS.soccer.match4,
+              description: 'Ball control and dribbling',
+            },
+          ]}
         />
-
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={viewportConfig}
-          variants={staggerContainer}
-          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
-        >
-          {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-            <motion.div
-              key={i}
-              variants={staggerItem}
-              className="group relative aspect-square bg-gradient-to-br from-muted to-secondary rounded-xl overflow-hidden cursor-pointer"
-            >
-              <div className="absolute inset-0 flex items-center justify-center text-3xl">
-                ⚽
-              </div>
-              <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity" />
-            </motion.div>
-          ))}
-        </motion.div>
       </Section>
     </Layout>
   );
