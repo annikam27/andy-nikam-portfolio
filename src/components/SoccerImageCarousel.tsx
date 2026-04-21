@@ -30,7 +30,7 @@ export const SoccerImageCarousel = ({
 
   const onSelect = () => {
     if (!emblaApi) return;
-    setSelectedIndex(emblaApi.selectedIndex());
+    setSelectedIndex(emblaApi.selectedScrollSnap());
     setPrevBtnDisabled(!emblaApi.canScrollPrev());
     setNextBtnDisabled(!emblaApi.canScrollNext());
   };
