@@ -26,7 +26,7 @@ interface Tool {
   id: string;
   name: string;
   role: string;
-  Icon: React.ComponentType<{ className?: string }>;
+  Icon: React.ComponentType<{ className?: string; style?: React.CSSProperties }>;
   quadrant: Quadrant;
   ring: Ring;
   /** Position within quadrant: 0 = quadrant start edge, 1 = quadrant end edge */
