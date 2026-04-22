@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Mail, Calendar, Linkedin, Twitter, Github } from 'lucide-react';
+import { Mail, Calendar, Linkedin, Music2, Github } from 'lucide-react';
 import { fadeInUp, viewportConfig, defaultTransition } from '@/lib/animations';
 
 const footerLinks = [
@@ -13,8 +13,8 @@ const footerLinks = [
 ];
 
 const socialLinks = [
-  { icon: Linkedin, href: 'https://linkedin.com/in/andynikam', label: 'LinkedIn' },
-  { icon: Twitter, href: 'https://twitter.com/andynikam', label: 'Twitter' },
+  { icon: Linkedin, href: 'https://www.instagram.com/build.with.andy/', label: 'Instagram' },
+  { icon: Music2, href: 'https://tiktok.com/@andynikam', label: 'TikTok' },
   { icon: Github, href: 'https://github.com/andynikam', label: 'GitHub' },
 ];
 
