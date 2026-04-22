@@ -162,8 +162,11 @@ const BuildWithAndy = () => {
           className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto"
         >
           {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-            <motion.div
+            <motion.a
               key={i}
+              href="https://www.instagram.com/build.with.andy/"
+              target="_blank"
+              rel="noopener noreferrer"
               variants={staggerItem}
               className="group relative aspect-square bg-gradient-to-br from-muted to-secondary rounded-xl overflow-hidden cursor-pointer"
             >
@@ -173,7 +176,7 @@ const BuildWithAndy = () => {
               <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                 <span className="text-primary-foreground text-sm font-medium">View</span>
               </div>
-            </motion.div>
+            </motion.a>
           ))}
         </motion.div>
       </Section>
