@@ -1,226 +1,215 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import {
-  Brain,
-  Code2,
-  FileCode,
-  Database,
-  Cloud,
-  Link2,
-  Terminal,
-  Figma,
-  Sparkles,
-} from 'lucide-react';
+import { Figma, Terminal, MessageSquare, Code2, FileCode, Link2, Brain, Database, Zap, Cloud, Activity, Gauge } from 'lucide-react';
 
-type Category = 'ai' | 'frontend' | 'backend' | 'database' | 'devtools' | 'design';
-
-interface Tech {
-  id: string;
-  label: string;
-  description: string;
-  category: Category;
+interface TechItem {
   Icon: React.ComponentType<{ className?: string }>;
+  label: string;
+  desc: string;
 }
 
-const categoryColors: Record<Category, { stroke: string; glow: string; bg: string; text: string }> = {
-  ai:       { stroke: '#8B5CF6', glow: 'rgba(139, 92, 246, 0.5)',  bg: 'bg-purple-50',  text: 'text-purple-600' },
-  frontend: { stroke: '#3B82F6', glow: 'rgba(59, 130, 246, 0.5)',  bg: 'bg-blue-50',    text: 'text-blue-600' },
-  backend:  { stroke: '#14B8A6', glow: 'rgba(20, 184, 166, 0.5)',  bg: 'bg-teal-50',    text: 'text-teal-600' },
-  database: { stroke: '#10B981', glow: 'rgba(16, 185, 129, 0.5)',  bg: 'bg-emerald-50', text: 'text-emerald-600' },
-  devtools: { stroke: '#F97316', glow: 'rgba(249, 115, 22, 0.5)',  bg: 'bg-orange-50',  text: 'text-orange-600' },
-  design:   { stroke: '#EC4899', glow: 'rgba(236, 72, 153, 0.5)',  bg: 'bg-pink-50',    text: 'text-pink-600' },
-};
+interface Layer {
+  id: string;
+  title: string;
+  subtitle: string;
+  latency: string;
+  gradient: string;
+  border: string;
+  accent: string;
+  iconBg: string;
+  items: TechItem[];
+}
 
-const categoryLabels: Record<Category, string> = {
-  ai: 'AI / LLM',
-  frontend: 'Frontend',
-  backend: 'Backend',
-  database: 'Database',
-  devtools: 'Dev Tools',
-  design: 'Design',
-};
-
-const techs: Tech[] = [
-  { id: 'claude',    label: 'Claude API', category: 'ai',       Icon: Brain,    description: 'LLM backbone — reasoning, content generation' },
-  { id: 'nextjs',    label: 'Next.js',    category: 'frontend', Icon: Code2,    description: 'Full-stack framework, SSR, API routes' },
-  { id: 'ts',        label: 'TypeScript', category: 'frontend', Icon: FileCode, description: 'Type safety, scalable development' },
-  { id: 'supabase',  label: 'Supabase',   category: 'database', Icon: Database, description: 'Realtime DB, auth, vector storage for AI' },
-  { id: 'vercel',    label: 'Vercel',     category: 'backend',  Icon: Cloud,    description: 'Deployment, edge functions, AI integration' },
-  { id: 'langchain', label: 'LangChain',  category: 'ai',       Icon: Link2,    description: 'AI orchestration, prompt chains, memory' },
-  { id: 'cursor',    label: 'Cursor',     category: 'devtools', Icon: Terminal, description: 'AI-assisted development, code generation' },
-  { id: 'figma',     label: 'Figma',      category: 'design',   Icon: Figma,    description: 'Design systems, specs, collaboration' },
+const layers: Layer[] = [
+  {
+    id: 'design',
+    title: 'Product & Design',
+    subtitle: 'Where ideas become designs and specifications',
+    latency: 'Iteration: hours → minutes',
+    gradient: 'from-sky-100 to-blue-100',
+    border: 'border-sky-300/60',
+    accent: 'text-sky-700',
+    iconBg: 'bg-sky-500/10 text-sky-600',
+    items: [
+      { Icon: Figma, label: 'Figma', desc: 'Design systems & specs' },
+      { Icon: Terminal, label: 'Cursor', desc: 'AI-assisted development' },
+      { Icon: MessageSquare, label: 'Feedback Loops', desc: 'User research & iteration' },
+    ],
+  },
+  {
+    id: 'frontend',
+    title: 'Frontend & Logic',
+    subtitle: 'Where designs become interactive, intelligent applications',
+    latency: 'Render: <100ms TTI',
+    gradient: 'from-blue-100 to-indigo-100',
+    border: 'border-indigo-300/60',
+    accent: 'text-indigo-700',
+    iconBg: 'bg-indigo-500/10 text-indigo-600',
+    items: [
+      { Icon: Code2, label: 'Next.js', desc: 'SSR, routing, API layer' },
+      { Icon: FileCode, label: 'TypeScript', desc: 'Type-safe scale' },
+      { Icon: Link2, label: 'LangChain', desc: 'Prompt orchestration' },
+    ],
+  },
+  {
+    id: 'ai',
+    title: 'AI & Data',
+    subtitle: 'Where AI reasoning powers personalized, context-aware features',
+    latency: 'Inference: ~800ms p50',
+    gradient: 'from-indigo-100 to-purple-100',
+    border: 'border-purple-300/60',
+    accent: 'text-purple-700',
+    iconBg: 'bg-purple-500/10 text-purple-600',
+    items: [
+      { Icon: Brain, label: 'Claude API', desc: 'LLM reasoning engine' },
+      { Icon: Database, label: 'Supabase', desc: 'Vector + realtime DB' },
+      { Icon: Zap, label: 'Realtime Sync', desc: 'Live context streams' },
+    ],
+  },
+  {
+    id: 'infra',
+    title: 'Infrastructure & Deployment',
+    subtitle: 'Where products scale to users globally with minimal latency',
+    latency: 'Edge: <50ms global',
+    gradient: 'from-purple-100 to-blue-200',
+    border: 'border-blue-400/60',
+    accent: 'text-blue-800',
+    iconBg: 'bg-blue-600/10 text-blue-700',
+    items: [
+      { Icon: Cloud, label: 'Vercel Edge', desc: 'Global edge functions' },
+      { Icon: Gauge, label: 'API Scaling', desc: 'Autoscale on demand' },
+      { Icon: Activity, label: 'Monitoring', desc: 'Observability & alerts' },
+    ],
+  },
 ];
 
 const TechStackWeb = () => {
   const [hovered, setHovered] = useState<string | null>(null);
-  const hoveredTech = techs.find(t => t.id === hovered);
-
-  // Radial positions (percentages inside the container)
-  const cx = 50;
-  const cy = 50;
-  const radius = 38;
-
-  const positioned = techs.map((t, i) => {
-    const angle = (i / techs.length) * Math.PI * 2 - Math.PI / 2;
-    return {
-      ...t,
-      x: cx + Math.cos(angle) * radius,
-      y: cy + Math.sin(angle) * radius,
-    };
-  });
-
-  const categories = Array.from(new Set(techs.map(t => t.category))) as Category[];
 
   return (
-    <div className="w-full">
-      <div className="relative w-full aspect-square max-w-[560px] mx-auto">
-        {/* SVG lines */}
-        <svg
-          className="absolute inset-0 w-full h-full"
-          viewBox="0 0 100 100"
-          preserveAspectRatio="xMidYMid meet"
-        >
-          <defs>
-            {positioned.map(t => {
-              const c = categoryColors[t.category];
-              return (
-                <linearGradient key={`g-${t.id}`} id={`grad-${t.id}`} x1="50%" y1="50%" x2={`${t.x}%`} y2={`${t.y}%`}>
-                  <stop offset="0%" stopColor="#8B5CF6" stopOpacity="0.9" />
-                  <stop offset="100%" stopColor={c.stroke} stopOpacity="0.9" />
-                </linearGradient>
-              );
-            })}
-            <filter id="line-glow" x="-50%" y="-50%" width="200%" height="200%">
-              <feGaussianBlur stdDeviation="0.6" result="blur" />
-              <feMerge>
-                <feMergeNode in="blur" />
-                <feMergeNode in="SourceGraphic" />
-              </feMerge>
-            </filter>
-          </defs>
+    <div className="w-full max-w-3xl mx-auto">
+      <div className="relative">
+        {/* Flowing particles (vertical) */}
+        <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-3xl">
+          {[0, 1, 2, 3, 4].map((i) => (
+            <motion.div
+              key={i}
+              className="absolute w-1.5 h-1.5 rounded-full"
+              style={{
+                left: `${20 + i * 15}%`,
+                background: 'radial-gradient(circle, rgba(139,92,246,0.9) 0%, rgba(59,130,246,0) 70%)',
+                boxShadow: '0 0 8px rgba(139,92,246,0.8)',
+              }}
+              initial={{ top: '-5%', opacity: 0 }}
+              animate={{ top: '105%', opacity: [0, 1, 1, 0] }}
+              transition={{
+                duration: 4.5,
+                delay: i * 0.9,
+                repeat: Infinity,
+                ease: 'linear',
+              }}
+            />
+          ))}
+          {[0, 1, 2].map((i) => (
+            <motion.div
+              key={`beam-${i}`}
+              className="absolute w-px h-16"
+              style={{
+                left: `${35 + i * 20}%`,
+                background: 'linear-gradient(to bottom, transparent, rgba(59,130,246,0.6), transparent)',
+              }}
+              initial={{ top: '-10%' }}
+              animate={{ top: '110%' }}
+              transition={{
+                duration: 5,
+                delay: i * 1.5,
+                repeat: Infinity,
+                ease: 'linear',
+              }}
+            />
+          ))}
+        </div>
 
-          {positioned.map((t, i) => {
-            const active = hovered === t.id;
-            const dim = hovered && !active;
+        <div className="relative flex flex-col gap-3">
+          {layers.map((layer, idx) => {
+            const isHovered = hovered === layer.id;
             return (
-              <motion.line
-                key={t.id}
-                x1={cx}
-                y1={cy}
-                x2={t.x}
-                y2={t.y}
-                stroke={`url(#grad-${t.id})`}
-                strokeWidth={active ? 0.6 : 0.3}
-                strokeLinecap="round"
-                filter="url(#line-glow)"
-                initial={{ pathLength: 0, opacity: 0 }}
-                animate={{
-                  pathLength: 1,
-                  opacity: dim ? 0.25 : 1,
-                }}
-                transition={{
-                  pathLength: { duration: 1.2, delay: 0.1 + i * 0.08, ease: 'easeOut' },
-                  opacity: { duration: 0.3 },
-                }}
-              />
+              <motion.div
+                key={layer.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: idx * 0.15, ease: 'easeOut' }}
+                onMouseEnter={() => setHovered(layer.id)}
+                onMouseLeave={() => setHovered(null)}
+                className={`relative rounded-2xl border backdrop-blur-sm bg-gradient-to-br ${layer.gradient} ${layer.border} transition-all duration-300 ${
+                  isHovered ? 'shadow-xl scale-[1.01]' : 'shadow-sm'
+                }`}
+              >
+                <div className="p-5 sm:p-6">
+                  <div className="flex items-start justify-between gap-4 mb-4">
+                    <div>
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className={`text-[10px] font-mono uppercase tracking-wider ${layer.accent}`}>
+                          Layer {idx + 1}
+                        </span>
+                        <span className="text-[10px] font-mono text-muted-foreground">•</span>
+                        <span className="text-[10px] font-mono text-muted-foreground">{layer.latency}</span>
+                      </div>
+                      <h3 className={`text-lg sm:text-xl font-semibold ${layer.accent}`}>{layer.title}</h3>
+                      <p className="text-xs sm:text-sm text-foreground/70 mt-1">{layer.subtitle}</p>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-2 sm:gap-3">
+                    {layer.items.map((item) => {
+                      const Icon = item.Icon;
+                      return (
+                        <div
+                          key={item.label}
+                          className="rounded-xl bg-white/60 border border-white/80 p-3 transition-all duration-300 hover:bg-white/90"
+                        >
+                          <div className={`w-8 h-8 rounded-lg flex items-center justify-center mb-2 ${layer.iconBg}`}>
+                            <Icon className="w-4 h-4" />
+                          </div>
+                          <div className="text-xs font-semibold text-foreground leading-tight">{item.label}</div>
+                          <motion.div
+                            initial={false}
+                            animate={{
+                              height: isHovered ? 'auto' : 0,
+                              opacity: isHovered ? 1 : 0,
+                            }}
+                            transition={{ duration: 0.25 }}
+                            className="overflow-hidden"
+                          >
+                            <div className="text-[10px] text-muted-foreground mt-1 leading-snug">{item.desc}</div>
+                          </motion.div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Connector arrow between layers */}
+                {idx < layers.length - 1 && (
+                  <div className="absolute left-1/2 -bottom-3 -translate-x-1/2 z-10">
+                    <motion.div
+                      animate={{ y: [0, 4, 0] }}
+                      transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+                      className="w-6 h-6 rounded-full bg-white border border-border shadow-sm flex items-center justify-center"
+                    >
+                      <div className="w-1.5 h-1.5 rounded-full bg-gradient-to-br from-blue-500 to-purple-500" />
+                    </motion.div>
+                  </div>
+                )}
+              </motion.div>
             );
           })}
-        </svg>
-
-        {/* Center node */}
-        <motion.div
-          initial={{ scale: 0, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.6, ease: 'easeOut' }}
-          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20"
-        >
-          <div className="relative">
-            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-500/30 to-purple-500/30 blur-2xl animate-pulse" />
-            <div className="relative rounded-full bg-gradient-to-br from-blue-600 to-purple-600 text-white shadow-xl px-4 py-4 sm:px-5 sm:py-5 flex flex-col items-center justify-center w-28 h-28 sm:w-32 sm:h-32 text-center">
-              <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 mb-1" />
-              <span className="text-[10px] sm:text-xs font-semibold leading-tight">
-                AI-Powered<br />Product<br />Solutions
-              </span>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Tech nodes */}
-        {positioned.map((t, i) => {
-          const c = categoryColors[t.category];
-          const active = hovered === t.id;
-          const dim = hovered && !active;
-          const Icon = t.Icon;
-          return (
-            <motion.div
-              key={t.id}
-              className="absolute z-10"
-              style={{ left: `${t.x}%`, top: `${t.y}%`, transform: 'translate(-50%, -50%)' }}
-              initial={{ scale: 0, opacity: 0 }}
-              animate={{ scale: 1, opacity: dim ? 0.5 : 1 }}
-              transition={{ delay: 0.8 + i * 0.08, type: 'spring', stiffness: 200, damping: 15 }}
-              onMouseEnter={() => setHovered(t.id)}
-              onMouseLeave={() => setHovered(null)}
-              onFocus={() => setHovered(t.id)}
-              onBlur={() => setHovered(null)}
-            >
-              <button
-                type="button"
-                className="group flex flex-col items-center gap-1 outline-none"
-                aria-label={`${t.label}: ${t.description}`}
-              >
-                <div
-                  className={`relative rounded-full bg-white border transition-all duration-300 flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 ${
-                    active ? 'scale-110 border-transparent' : 'border-border'
-                  }`}
-                  style={{
-                    boxShadow: active
-                      ? `0 0 0 2px ${c.stroke}, 0 8px 24px ${c.glow}`
-                      : `0 4px 12px rgba(0,0,0,0.06)`,
-                  }}
-                >
-                  <Icon className={`w-4 h-4 sm:w-5 sm:h-5 ${c.text}`} />
-                </div>
-                <span className={`text-[10px] sm:text-xs font-medium whitespace-nowrap ${active ? 'text-foreground' : 'text-muted-foreground'}`}>
-                  {t.label}
-                </span>
-              </button>
-            </motion.div>
-          );
-        })}
+        </div>
       </div>
 
-      {/* Description panel */}
-      <div className="mt-6 min-h-[56px] max-w-xl mx-auto text-center px-4">
-        {hoveredTech ? (
-          <motion.div
-            key={hoveredTech.id}
-            initial={{ opacity: 0, y: 6 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.25 }}
-          >
-            <div className="text-sm font-semibold text-foreground">{hoveredTech.label}</div>
-            <div className="text-sm text-muted-foreground">{hoveredTech.description}</div>
-          </motion.div>
-        ) : (
-          <div className="text-sm text-muted-foreground">
-            Hover a technology to see its role in AI product development.
-          </div>
-        )}
-      </div>
-
-      {/* Legend */}
-      <div className="mt-4 flex flex-wrap justify-center gap-x-4 gap-y-2">
-        {categories.map(cat => (
-          <div key={cat} className="flex items-center gap-2">
-            <span
-              className="inline-block w-2.5 h-2.5 rounded-full"
-              style={{ backgroundColor: categoryColors[cat].stroke }}
-            />
-            <span className="text-xs text-muted-foreground">{categoryLabels[cat]}</span>
-          </div>
-        ))}
-      </div>
+      <p className="text-center text-xs text-muted-foreground mt-6">
+        Hover a layer to reveal the workflow details.
+      </p>
     </div>
   );
 };
