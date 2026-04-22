@@ -104,7 +104,7 @@ const Portfolio = () => {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="mt-12 max-w-3xl mx-auto"
+            className="mt-12 max-w-4xl mx-auto"
           >
             <TechStackWeb />
           </motion.div>
