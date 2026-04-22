@@ -57,7 +57,12 @@ const BuildWithAndy = () => {
           transition={defaultTransition}
           className="mb-12"
         >
-          <div className="relative aspect-video max-w-4xl mx-auto bg-gradient-to-br from-primary/5 to-accent/5 rounded-3xl overflow-hidden shadow-elevated group cursor-pointer">
+          <a
+            href="https://www.youtube.com/@BuildWithPurpose-ai"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="relative block aspect-video max-w-4xl mx-auto bg-gradient-to-br from-primary/5 to-accent/5 rounded-3xl overflow-hidden shadow-elevated group cursor-pointer"
+          >
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="w-20 h-20 rounded-full bg-primary flex items-center justify-center shadow-glow group-hover:scale-110 transition-transform duration-300">
                 <Play className="w-8 h-8 text-primary-foreground ml-1" />
@@ -66,7 +71,7 @@ const BuildWithAndy = () => {
             <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-foreground/80 to-transparent">
               <h3 className="text-xl font-semibold text-background">Latest Video: Building AI Products from Scratch</h3>
             </div>
-          </div>
+          </a>
         </motion.div>
 
         <motion.div
@@ -77,8 +82,11 @@ const BuildWithAndy = () => {
           className="grid grid-cols-1 md:grid-cols-3 gap-6"
         >
           {videos.map((video) => (
-            <motion.div
+            <motion.a
               key={video.title}
+              href="https://www.youtube.com/@BuildWithPurpose-ai"
+              target="_blank"
+              rel="noopener noreferrer"
               variants={staggerItem}
               className="group bg-card border border-border rounded-2xl overflow-hidden shadow-card hover:shadow-elevated transition-all duration-300"
             >
@@ -96,7 +104,7 @@ const BuildWithAndy = () => {
                 </h4>
                 <p className="text-sm text-muted-foreground mt-1">{video.views} views</p>
               </div>
-            </motion.div>
+            </motion.a>
           ))}
         </motion.div>
       </Section>
