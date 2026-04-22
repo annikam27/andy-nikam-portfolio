@@ -253,8 +253,8 @@ const Index = () => {
             </div>
             <div className="bg-card border border-border rounded-2xl p-6 shadow-card hover:shadow-elevated transition-shadow">
               <Zap className="w-8 h-8 text-accent mb-4" />
-              <h4 className="font-semibold text-foreground mb-1">Twitter/X</h4>
-              <p className="text-sm text-muted-foreground">Real-time thoughts & threads</p>
+              <h4 className="font-semibold text-foreground mb-1">TikTok</h4>
+              <p className="text-sm text-muted-foreground">Short-form product & AI insights</p>
             </div>
             <div className="col-span-2 bg-gradient-to-br from-primary/5 to-accent/5 border border-border rounded-2xl p-6">
               <h4 className="font-semibold text-foreground mb-2">Newsletter</h4>
