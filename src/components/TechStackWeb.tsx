@@ -10,6 +10,7 @@ type Phase = {
   id: string;
   name: string;
   angle: number; // center angle in degrees
+  hue: string; // master hue (hex)
   activities: Activity[];
 };
 
@@ -18,6 +19,7 @@ const PHASES: Phase[] = [
     id: 'discovery',
     name: 'DISCOVERY',
     angle: -135,
+    hue: '#22d3ee',
     activities: [
       {
         name: 'Customer Intelligence',
@@ -41,6 +43,7 @@ const PHASES: Phase[] = [
     id: 'agents',
     name: 'AGENTS',
     angle: -45,
+    hue: '#a855f7',
     activities: [
       {
         name: 'Simple',
@@ -69,6 +72,7 @@ const PHASES: Phase[] = [
     id: 'delivery',
     name: 'DELIVERY',
     angle: 45,
+    hue: '#10b981',
     activities: [
       {
         name: 'Vibe Coding',
@@ -92,6 +96,7 @@ const PHASES: Phase[] = [
     id: 'productivity',
     name: 'PRODUCTIVITY',
     angle: 135,
+    hue: '#f59e0b',
     activities: [
       {
         name: 'Dictation',
