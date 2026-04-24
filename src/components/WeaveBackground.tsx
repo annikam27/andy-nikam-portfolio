@@ -1,135 +1,149 @@
-// Static, multilayered "weave" SVG background — cool brand palette only.
-// No animations. Low opacity so foreground copy stays legible.
+// Architectural "Blueprint" weave — ultra-fine monochromatic Slate lines
+// on a clean white/slate base. Depth comes from line density at crossings,
+// not color. Hover any of the 4 quadrants (via the `data-focus-quadrant`
+// attribute on a parent) to selectively illuminate that quadrant in cyan.
 
-const HUES = {
-  sky: '#38bdf8',       // sky blue
-  teal: '#14b8a6',      // cyber teal/green accent
-  sapphire: '#1e40af',  // deep sapphire
-  indigo: '#6366f1',    // cool amethyst/indigo for shadow depth
-  cyan: '#22d3ee',      // bright cyan highlight
-};
+import { useEffect, useState } from 'react';
+
+const INK = '#1e293b';   // Midnight Slate — the only weave color by default
+const POP = '#22d3ee';   // Cyan — selective focus accent
+
+type Quadrant = 'tl' | 'tr' | 'bl' | 'br' | null;
 
 export const WeaveBackground = () => {
-  // Generate a dense set of overlapping wavy paths cascading
-  // from top-right to bottom-left.
-  const paths: { d: string; stroke: string; sw: number; op: number; blend: string }[] = [];
+  const [focus, setFocus] = useState<Quadrant>(null);
+
+  // Listen for quadrant focus events emitted by metric cards (or anything else)
+  useEffect(() => {
+    const onFocus = (e: Event) => {
+      const detail = (e as CustomEvent).detail as { quadrant: Quadrant };
+      setFocus(detail?.quadrant ?? null);
+    };
+    window.addEventListener('weave:focus', onFocus as EventListener);
+    return () => window.removeEventListener('weave:focus', onFocus as EventListener);
+  }, []);
+
   const W = 1600;
   const H = 1000;
-  const count = 38;
 
-  for (let i = 0; i < count; i++) {
-    const t = i / (count - 1);
-    // Diagonal offset: each line shifts down-left
-    const yStart = -120 + t * (H + 240);
-    const yEnd = yStart - 220 + Math.sin(i * 0.7) * 60;
-    const amp = 90 + Math.sin(i * 1.3) * 40;
+  // Build a dense, woven matrix: two diagonal families that cross each other.
+  // Family A: cascading top-right → bottom-left wavy threads (primary flow).
+  // Family B: counter-diagonal threads that weave through Family A.
+  type Thread = { d: string; quadrant: Quadrant };
+  const threads: Thread[] = [];
+
+  const quadrantOf = (x: number, y: number): Quadrant => {
+    const left = x < W / 2;
+    const top = y < H / 2;
+    if (top && left) return 'tl';
+    if (top && !left) return 'tr';
+    if (!top && left) return 'bl';
+    return 'br';
+  };
+
+  // Family A — 56 threads, top-right → bottom-left diagonal cascade
+  const countA = 56;
+  for (let i = 0; i < countA; i++) {
+    const t = i / (countA - 1);
+    const yStart = -160 + t * (H + 320);
+    const yEnd = yStart - 260 + Math.sin(i * 0.7) * 70;
+    const amp = 70 + Math.sin(i * 1.3) * 35;
     const phase = i * 0.55;
 
-    // Cubic-ish wavy path with multiple control points (weaving look)
     const d = `
       M ${W + 80},${yStart}
       C ${W * 0.78},${yStart + amp * Math.sin(phase)} ${W * 0.62},${yStart - amp * Math.cos(phase)} ${W * 0.5},${(yStart + yEnd) / 2}
       S ${W * 0.28},${(yStart + yEnd) / 2 - amp * Math.sin(phase + 1)} ${W * 0.12},${yEnd + amp * 0.4}
       S -${80},${yEnd + amp * 0.8} -${160},${yEnd + 120}
     `;
+    threads.push({ d, quadrant: quadrantOf(W * 0.5, (yStart + yEnd) / 2) });
+  }
 
-    // Distribute hues — teal & cyan as bright accents, indigo/sapphire as shadow
-    const palette = [HUES.sky, HUES.teal, HUES.sapphire, HUES.cyan, HUES.indigo, HUES.sky, HUES.teal];
-    const stroke = palette[i % palette.length];
-    const isAccent = stroke === HUES.teal || stroke === HUES.cyan;
-    const isShadow = stroke === HUES.indigo || stroke === HUES.sapphire;
+  // Family B — 36 counter-diagonal threads (top-left → bottom-right) for the weave
+  const countB = 36;
+  for (let i = 0; i < countB; i++) {
+    const t = i / (countB - 1);
+    const yStart = -120 + t * (H + 240);
+    const yEnd = yStart + 220 + Math.cos(i * 0.6) * 55;
+    const amp = 55 + Math.cos(i * 1.1) * 25;
+    const phase = i * 0.42;
 
-    paths.push({
-      d,
-      stroke,
-      sw: isAccent ? 1 : isShadow ? 1.6 : 1.2,
-      op: isAccent ? 0.55 : isShadow ? 0.4 : 0.45,
-      blend: isShadow ? 'multiply' : 'screen',
-    });
+    const d = `
+      M -${80},${yStart}
+      C ${W * 0.22},${yStart + amp * Math.cos(phase)} ${W * 0.4},${yStart - amp * Math.sin(phase)} ${W * 0.5},${(yStart + yEnd) / 2}
+      S ${W * 0.74},${(yStart + yEnd) / 2 + amp * Math.cos(phase + 1)} ${W * 0.9},${yEnd - amp * 0.3}
+      S ${W + 80},${yEnd + amp * 0.6} ${W + 160},${yEnd + 100}
+    `;
+    threads.push({ d, quadrant: quadrantOf(W * 0.5, (yStart + yEnd) / 2) });
   }
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {/* Soft base wash so the weave reads on light AND dark */}
+      {/* Clean blueprint base — soft white → slate, mirrors original portfolio */}
       <div
         className="absolute inset-0"
         style={{
           background:
-            'radial-gradient(120% 80% at 85% 10%, rgba(20,184,166,0.08), transparent 55%), radial-gradient(100% 80% at 15% 90%, rgba(99,102,241,0.07), transparent 55%)',
+            'linear-gradient(135deg, #ffffff 0%, #f8fafc 45%, #eef2f7 100%)',
         }}
       />
 
-      {/* The weave — capped to 18-22% opacity overall */}
+      {/* The fine-line weave */}
       <svg
         className="absolute inset-0 w-full h-full"
         viewBox={`0 0 ${W} ${H}`}
         preserveAspectRatio="xMidYMid slice"
-        style={{ opacity: 0.22 }}
         aria-hidden="true"
+        // shape-rendering keeps the 0.5px lines crisp on all DPRs
+        shapeRendering="geometricPrecision"
       >
         <defs>
-          <filter id="weave-soft" x="-10%" y="-10%" width="120%" height="120%">
-            <feGaussianBlur stdDeviation="0.6" />
-          </filter>
-          <radialGradient id="clarity-glow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor={HUES.cyan} stopOpacity="0.55" />
-            <stop offset="60%" stopColor={HUES.sky} stopOpacity="0.12" />
-            <stop offset="100%" stopColor={HUES.sky} stopOpacity="0" />
+          {/* Subtle vignette mask so edges don't feel hard */}
+          <radialGradient id="weave-vignette" cx="50%" cy="50%" r="70%">
+            <stop offset="0%" stopColor="#fff" stopOpacity="1" />
+            <stop offset="80%" stopColor="#fff" stopOpacity="1" />
+            <stop offset="100%" stopColor="#fff" stopOpacity="0.85" />
           </radialGradient>
         </defs>
 
-        {/* Shadow layer (multiply) */}
-        <g style={{ mixBlendMode: 'multiply' }}>
-          {paths
-            .filter((p) => p.blend === 'multiply')
-            .map((p, i) => (
-              <path
-                key={`m-${i}`}
-                d={p.d}
-                stroke={p.stroke}
-                strokeWidth={p.sw}
-                strokeOpacity={p.op}
-                fill="none"
-                strokeLinecap="round"
-                filter="url(#weave-soft)"
-              />
-            ))}
+        {/* Base ink layer — every thread, very low opacity. Density at crossings
+            naturally produces darker areas (depth via luminance). */}
+        <g
+          stroke={INK}
+          strokeWidth={0.5}
+          strokeOpacity={focus ? 0.12 : 0.28}
+          fill="none"
+          strokeLinecap="round"
+          style={{ transition: 'stroke-opacity 300ms ease' }}
+        >
+          {threads.map((t, i) => (
+            <path key={`ink-${i}`} d={t.d} />
+          ))}
         </g>
 
-        {/* Light layer (screen) */}
-        <g style={{ mixBlendMode: 'screen' }}>
-          {paths
-            .filter((p) => p.blend === 'screen')
-            .map((p, i) => (
-              <path
-                key={`s-${i}`}
-                d={p.d}
-                stroke={p.stroke}
-                strokeWidth={p.sw}
-                strokeOpacity={p.op}
-                fill="none"
-                strokeLinecap="round"
-              />
-            ))}
-        </g>
-      </svg>
-
-      {/* Focused "Clarity" glow — sits behind headline center */}
-      <svg
-        className="absolute inset-0 w-full h-full"
-        viewBox={`0 0 ${W} ${H}`}
-        preserveAspectRatio="xMidYMid slice"
-        aria-hidden="true"
-      >
-        <ellipse
-          cx={W * 0.58}
-          cy={H * 0.46}
-          rx={260}
-          ry={170}
-          fill="url(#clarity-glow)"
-          style={{ mixBlendMode: 'screen' }}
-        />
+        {/* Selective focus layer — only threads in the hovered quadrant pop in cyan */}
+        {focus && (
+          <g
+            stroke={POP}
+            strokeWidth={0.6}
+            strokeOpacity={0.95}
+            fill="none"
+            strokeLinecap="round"
+            style={{ filter: 'drop-shadow(0 0 1.5px rgba(34,211,238,0.55))' }}
+          >
+            {threads
+              .filter((t) => t.quadrant === focus)
+              .map((t, i) => (
+                <path key={`pop-${i}`} d={t.d} />
+              ))}
+          </g>
+        )}
       </svg>
     </div>
   );
+};
+
+// Helper: emit a focus event from anywhere in the tree
+export const focusWeaveQuadrant = (quadrant: 'tl' | 'tr' | 'bl' | 'br' | null) => {
+  window.dispatchEvent(new CustomEvent('weave:focus', { detail: { quadrant } }));
 };
