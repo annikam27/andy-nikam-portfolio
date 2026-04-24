@@ -10,6 +10,7 @@ type Phase = {
   id: string;
   name: string;
   angle: number; // center angle in degrees
+  hue: string; // master hue (hex)
   activities: Activity[];
 };
 
@@ -18,6 +19,7 @@ const PHASES: Phase[] = [
     id: 'discovery',
     name: 'DISCOVERY',
     angle: -135,
+    hue: '#22d3ee',
     activities: [
       {
         name: 'Customer Intelligence',
@@ -41,6 +43,7 @@ const PHASES: Phase[] = [
     id: 'agents',
     name: 'AGENTS',
     angle: -45,
+    hue: '#a855f7',
     activities: [
       {
         name: 'Simple',
@@ -69,6 +72,7 @@ const PHASES: Phase[] = [
     id: 'delivery',
     name: 'DELIVERY',
     angle: 45,
+    hue: '#10b981',
     activities: [
       {
         name: 'Vibe Coding',
@@ -92,6 +96,7 @@ const PHASES: Phase[] = [
     id: 'productivity',
     name: 'PRODUCTIVITY',
     angle: 135,
+    hue: '#f59e0b',
     activities: [
       {
         name: 'Dictation',
@@ -134,6 +139,33 @@ const polar = (angle: number, r: number) => ({
   y: C + Math.sin(toRad(angle)) * r,
 });
 
+// ===== Color Utils =====
+// Hex -> {r,g,b}
+function hexToRgb(hex: string) {
+  const h = hex.replace('#', '');
+  const n = parseInt(h, 16);
+  return { r: (n >> 16) & 255, g: (n >> 8) & 255, b: n & 255 };
+}
+function rgba(hex: string, a: number) {
+  const { r, g, b } = hexToRgb(hex);
+  return `rgba(${r},${g},${b},${a})`;
+}
+// Mix two hex colors by t in [0,1]
+function mix(hexA: string, hexB: string, t: number) {
+  const a = hexToRgb(hexA);
+  const b = hexToRgb(hexB);
+  const r = Math.round(a.r + (b.r - a.r) * t);
+  const g = Math.round(a.g + (b.g - a.g) * t);
+  const bl = Math.round(a.b + (b.b - a.b) * t);
+  return `rgb(${r},${g},${bl})`;
+}
+// Shade a hex color: t<0 darker toward navy, t>0 brighter toward white
+function shade(hex: string, t: number) {
+  if (t >= 0) return mix(hex, '#ffffff', Math.min(t, 1));
+  return mix(hex, '#0b1224', Math.min(-t, 1));
+}
+const GHOST = '#475569';
+
 // Spread activities within a phase's quadrant (90° wedge)
 function activityAngle(phaseAngle: number, idx: number, total: number) {
   const wedge = 70; // degrees of usable wedge per phase
@@ -172,6 +204,9 @@ const CelestialMap = () => {
   }, []);
 
   const isDimmed = (phaseId: string) => activePhase !== null && activePhase !== phaseId;
+
+  // When a tool is hovered, everything outside the focused path becomes Ghost Gray.
+  const focusActive = activeTool !== null;
 
   return (
     <div className="relative w-full aspect-square max-w-[720px] mx-auto">
@@ -223,20 +258,59 @@ const CelestialMap = () => {
             <stop offset="40%" stopColor="#a5b4fc" stopOpacity="0.9" />
             <stop offset="100%" stopColor="#3b82f6" stopOpacity="0" />
           </radialGradient>
-          <radialGradient id="flareGrad" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#ffffff" stopOpacity="0.95" />
-            <stop offset="60%" stopColor="#60a5fa" stopOpacity="0.5" />
-            <stop offset="100%" stopColor="#3b82f6" stopOpacity="0" />
-          </radialGradient>
-          <radialGradient id="planetGrad" cx="35%" cy="30%" r="70%">
-            <stop offset="0%" stopColor="rgba(255,255,255,0.7)" />
-            <stop offset="40%" stopColor="rgba(255,255,255,0.18)" />
-            <stop offset="100%" stopColor="rgba(15,23,42,0.6)" />
-          </radialGradient>
+          {/* Per-quadrant flare gradients (Layer 1) */}
+          {PHASES.map((p) => (
+            <radialGradient key={`fg-${p.id}`} id={`flare-${p.id}`} cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stopColor="#ffffff" stopOpacity="0.95" />
+              <stop offset="55%" stopColor={p.hue} stopOpacity="0.85" />
+              <stop offset="100%" stopColor={p.hue} stopOpacity="0" />
+            </radialGradient>
+          ))}
+          {/* Per-quadrant planet gradients (Layer 3) — shaded variations applied per-tool via stop color */}
+          {PHASES.map((p) =>
+            p.activities.map((a, ai) =>
+              a.tools.map((_t, ti) => {
+                // shade range per tool index: -0.35 (deep) to +0.25 (bright)
+                const total = a.tools.length;
+                const t = total === 1 ? 0 : -0.35 + (0.6 * ti) / (total - 1);
+                const base = shade(p.hue, t);
+                return (
+                  <radialGradient
+                    key={`pg-${p.id}-${ai}-${ti}`}
+                    id={`planet-${p.id}-${ai}-${ti}`}
+                    cx="35%"
+                    cy="30%"
+                    r="75%"
+                  >
+                    <stop offset="0%" stopColor="rgba(255,255,255,0.85)" />
+                    <stop offset="45%" stopColor={base} stopOpacity="0.95" />
+                    <stop offset="100%" stopColor={shade(p.hue, -0.55)} stopOpacity="1" />
+                  </radialGradient>
+                );
+              })
+            )
+          )}
+          {/* Per-quadrant linear gradient for connection lines (Phase -> Activity) */}
+          {PHASES.map((p) => (
+            <linearGradient key={`lg-${p.id}`} id={`line-${p.id}`} x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor={p.hue} stopOpacity="0.95" />
+              <stop offset="100%" stopColor={rgba(p.hue, 0.5)} />
+            </linearGradient>
+          ))}
           <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
             <feGaussianBlur stdDeviation="6" result="blur" />
             <feMerge>
               <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+          {/* Stronger neon glow for Layer 1 phase nodes */}
+          <filter id="neon" x="-100%" y="-100%" width="300%" height="300%">
+            <feGaussianBlur stdDeviation="10" result="blur1" />
+            <feGaussianBlur in="blur1" stdDeviation="6" result="blur2" />
+            <feMerge>
+              <feMergeNode in="blur1" />
+              <feMergeNode in="blur2" />
               <feMergeNode in="SourceGraphic" />
             </feMerge>
           </filter>
@@ -258,7 +332,8 @@ const CelestialMap = () => {
         {/* Connections */}
         {layout.map((phase) => {
           const dim = isDimmed(phase.id);
-          const op = dim ? 0.08 : 0.55;
+          const op = dim ? 0.08 : 0.7;
+          const hue = phase.hue;
           return (
             <g key={`conn-${phase.id}`}>
               {/* Core -> Phase */}
@@ -267,13 +342,13 @@ const CelestialMap = () => {
                 y1={C}
                 x2={phase.pos.x}
                 y2={phase.pos.y}
-                stroke="rgba(186,230,253,0.6)"
-                strokeWidth={1.2}
+                stroke={focusActive && !dim ? hue : focusActive ? GHOST : hue}
+                strokeWidth={1.4}
                 strokeOpacity={op}
               />
               {/* Pulsing dot from core to phase */}
               {!dim && (
-                <circle r="2.5" fill="#ffffff" opacity="0.9">
+                <circle r="2.5" fill={hue} opacity="0.95">
                   <animateMotion
                     dur={`${3 + (phase.angle % 2 === 0 ? 0.5 : 0)}s`}
                     repeatCount="indefinite"
@@ -289,12 +364,13 @@ const CelestialMap = () => {
                     y1={phase.pos.y}
                     x2={act.pos.x}
                     y2={act.pos.y}
-                    stroke="rgba(186,230,253,0.5)"
-                    strokeWidth={1}
+                    stroke={focusActive && !dim ? `url(#line-${phase.id})` : focusActive ? GHOST : `url(#line-${phase.id})`}
+                    strokeWidth={1.1}
                     strokeOpacity={op}
                   />
                   {act.tools.map((tool, ti) => {
                     const isFocused = activeTool === `${phase.id}-${ai}-${ti}`;
+                    const ghosted = focusActive && !isFocused;
                     return (
                       <g key={`t-${phase.id}-${ai}-${ti}`}>
                         <line
@@ -304,16 +380,18 @@ const CelestialMap = () => {
                           y2={tool.pos.y}
                           stroke={
                             isFocused
-                              ? '#fbbf24'
-                              : 'rgba(186,230,253,0.4)'
+                              ? hue
+                              : ghosted
+                              ? GHOST
+                              : rgba(hue, 0.5)
                           }
-                          strokeWidth={isFocused ? 1.6 : 0.8}
-                          strokeOpacity={isFocused ? 1 : op}
+                          strokeWidth={isFocused ? 2 : 0.9}
+                          strokeOpacity={isFocused ? 1 : ghosted ? 0.25 : op}
                         />
                         {!dim && (
                           <circle
                             r={isFocused ? 3.5 : 1.8}
-                            fill={isFocused ? '#fde68a' : '#ffffff'}
+                            fill={isFocused ? '#ffffff' : hue}
                             opacity={isFocused ? 1 : 0.85}
                           >
                             <animateMotion
@@ -378,19 +456,35 @@ const CelestialMap = () => {
               onMouseEnter={() => setActivePhase(phase.id)}
               onClick={() => setActivePhase(phase.id)}
             >
+              {/* Outer neon halo */}
+              <circle
+                cx={phase.pos.x}
+                cy={phase.pos.y}
+                r={active ? 60 : 50}
+                fill={phase.hue}
+                opacity={0.25}
+                filter="url(#neon)"
+              />
               <circle
                 cx={phase.pos.x}
                 cy={phase.pos.y}
                 r={active ? 46 : 38}
-                fill="url(#flareGrad)"
-                opacity={0.6}
+                fill={`url(#flare-${phase.id})`}
+                opacity={0.85}
               />
               <circle
                 cx={phase.pos.x}
                 cy={phase.pos.y}
                 r={20}
-                fill="rgba(255,255,255,0.95)"
-                filter="url(#glow)"
+                fill={phase.hue}
+                filter="url(#neon)"
+              />
+              <circle
+                cx={phase.pos.x}
+                cy={phase.pos.y}
+                r={14}
+                fill="#ffffff"
+                opacity={0.95}
               />
               <text
                 x={phase.pos.x}
@@ -410,6 +504,7 @@ const CelestialMap = () => {
         {/* Activity nodes (Orbit points of light) */}
         {layout.map((phase) => {
           const dim = isDimmed(phase.id);
+          const hue = phase.hue;
           return phase.activities.map((act, ai) => (
             <g
               key={`act-${phase.id}-${ai}`}
@@ -419,10 +514,10 @@ const CelestialMap = () => {
                 cx={act.pos.x}
                 cy={act.pos.y}
                 r={9}
-                fill="#3b82f6"
-                opacity={0.25}
+                fill={hue}
+                opacity={0.35}
               />
-              <circle cx={act.pos.x} cy={act.pos.y} r={3.5} fill="#60a5fa" />
+              <circle cx={act.pos.x} cy={act.pos.y} r={3.5} fill={rgba(hue, 0.75)} />
               <text
                 x={act.pos.x}
                 y={act.pos.y - 14}
@@ -440,10 +535,12 @@ const CelestialMap = () => {
         {/* Tool nodes (Glassmorphism planets) */}
         {layout.map((phase) => {
           const dim = isDimmed(phase.id);
+          const hue = phase.hue;
           return phase.activities.map((act, ai) =>
             act.tools.map((tool, ti) => {
               const id = `${phase.id}-${ai}-${ti}`;
               const focused = activeTool === id;
+              const ghosted = focusActive && !focused;
               const tx = tool.pos.x;
               const ty = tool.pos.y;
               // Label offset radially outward
@@ -466,9 +563,9 @@ const CelestialMap = () => {
                     cx={tx}
                     cy={ty}
                     r={focused ? 22 : 16}
-                    fill="url(#planetGrad)"
-                    stroke={focused ? '#fbbf24' : 'rgba(255,255,255,0.35)'}
-                    strokeWidth={focused ? 1.4 : 0.8}
+                    fill={ghosted ? GHOST : `url(#planet-${phase.id}-${ai}-${ti})`}
+                    stroke={focused ? '#ffffff' : ghosted ? '#334155' : rgba(hue, 0.7)}
+                    strokeWidth={focused ? 1.6 : 0.9}
                   />
                   <circle
                     cx={tx - 4}
@@ -482,7 +579,7 @@ const CelestialMap = () => {
                     textAnchor="middle"
                     fontSize="10"
                     fontWeight="600"
-                    fill={focused ? '#fde68a' : '#e2e8f0'}
+                    fill={focused ? '#ffffff' : ghosted ? GHOST : '#e2e8f0'}
                   >
                     {tool.name}
                   </text>
@@ -492,7 +589,7 @@ const CelestialMap = () => {
                       y={outward.y + 12}
                       textAnchor="middle"
                       fontSize="8"
-                      fill="#94a3b8"
+                      fill={rgba(hue, 0.95)}
                     >
                       {tool.desc}
                     </text>
