@@ -16,7 +16,7 @@ const Index = () => {
   return (
     <Layout>
       {/* Hero Section */}
-      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-white">
+      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-secondary/40 via-background to-primary/5">
         {/* Static multilayered weave background */}
         <WeaveBackground />
 
@@ -76,9 +76,9 @@ const Index = () => {
 
           {/* Metrics */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-20 max-w-4xl mx-auto">
-            <MetricCard value={165} prefix="$" suffix="M+" label="Revenue Impact" delay={0} quadrant="bl" />
-            <MetricCard value={200} suffix="M+" label="Users Served" delay={0.1} quadrant="br" />
-            <MetricCard value={15} suffix="+" label="AI Features Shipped" delay={0.2} quadrant="tr" />
+            <MetricCard value={165} prefix="$" suffix="M+" label="Revenue Impact" delay={0} />
+            <MetricCard value={200} suffix="M+" label="Users Served" delay={0.1} />
+            <MetricCard value={15} suffix="+" label="AI Features Shipped" delay={0.2} />
           </div>
         </div>
       </section>
