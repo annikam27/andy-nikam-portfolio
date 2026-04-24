@@ -139,6 +139,33 @@ const polar = (angle: number, r: number) => ({
   y: C + Math.sin(toRad(angle)) * r,
 });
 
+// ===== Color Utils =====
+// Hex -> {r,g,b}
+function hexToRgb(hex: string) {
+  const h = hex.replace('#', '');
+  const n = parseInt(h, 16);
+  return { r: (n >> 16) & 255, g: (n >> 8) & 255, b: n & 255 };
+}
+function rgba(hex: string, a: number) {
+  const { r, g, b } = hexToRgb(hex);
+  return `rgba(${r},${g},${b},${a})`;
+}
+// Mix two hex colors by t in [0,1]
+function mix(hexA: string, hexB: string, t: number) {
+  const a = hexToRgb(hexA);
+  const b = hexToRgb(hexB);
+  const r = Math.round(a.r + (b.r - a.r) * t);
+  const g = Math.round(a.g + (b.g - a.g) * t);
+  const bl = Math.round(a.b + (b.b - a.b) * t);
+  return `rgb(${r},${g},${bl})`;
+}
+// Shade a hex color: t<0 darker toward navy, t>0 brighter toward white
+function shade(hex: string, t: number) {
+  if (t >= 0) return mix(hex, '#ffffff', Math.min(t, 1));
+  return mix(hex, '#0b1224', Math.min(-t, 1));
+}
+const GHOST = '#475569';
+
 // Spread activities within a phase's quadrant (90° wedge)
 function activityAngle(phaseAngle: number, idx: number, total: number) {
   const wedge = 70; // degrees of usable wedge per phase
