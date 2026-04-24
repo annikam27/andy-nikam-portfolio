@@ -5,6 +5,12 @@ import { Section, SectionHeader } from '@/components/Section';
 import { ProjectCard } from '@/components/ProjectCard';
 import TechStackWeb from '@/components/TechStackWeb';
 import { staggerContainer } from '@/lib/animations';
+import financialCoachImg from '@/assets/projects/financial-coach.png';
+import flowpayImg from '@/assets/projects/flowpay.png';
+import n8nAgentsImg from '@/assets/projects/n8n-agents.png';
+import webexChatbotImg from '@/assets/projects/webex-chatbot.png';
+import compliancePlatformImg from '@/assets/projects/compliance-platform.jpg';
+import analyticsDashboardImg from '@/assets/projects/analytics-dashboard.jpg';
 
 const filters = ['All', 'AI/ML', 'Fintech', 'Enterprise', 'Side Projects'];
 
@@ -14,6 +20,7 @@ const projects = [
     description: 'Personalized AI-powered financial guidance helping users build better money habits through conversational interfaces and predictive analytics.',
     tags: ['AI/ML', 'Fintech', 'React', 'Python'],
     category: 'AI/ML',
+    image: financialCoachImg,
     metrics: [
       { label: 'Users', value: '50K+' },
       { label: 'Engagement', value: '+40%' }
@@ -24,6 +31,7 @@ const projects = [
     description: 'Modern payment infrastructure enabling seamless B2B transactions at scale with real-time settlement and fraud detection.',
     tags: ['Fintech', 'Enterprise', 'API', 'Node.js'],
     category: 'Fintech',
+    image: flowpayImg,
     metrics: [
       { label: 'TPV', value: '$2B+' },
       { label: 'Merchants', value: '10K+' }
@@ -34,6 +42,7 @@ const projects = [
     description: 'Custom workflow automation agents built on n8n for internal operations, reducing manual processes by 80%.',
     tags: ['Automation', 'n8n', 'Node.js'],
     category: 'Side Projects',
+    image: n8nAgentsImg,
     metrics: [
       { label: 'Workflows', value: '100+' },
       { label: 'Time Saved', value: '80%' }
@@ -44,6 +53,7 @@ const projects = [
     description: 'Intelligent meeting assistant with real-time transcription, action item extraction, and follow-up automation.',
     tags: ['AI/ML', 'Enterprise', 'NLP', 'Cisco'],
     category: 'Enterprise',
+    image: webexChatbotImg,
     metrics: [
       { label: 'Meetings', value: '1M+' },
       { label: 'Accuracy', value: '95%' }
@@ -54,6 +64,7 @@ const projects = [
     description: 'End-to-end regulatory compliance solution for fintech companies with automated reporting and audit trails.',
     tags: ['Enterprise', 'Fintech', 'Compliance'],
     category: 'Enterprise',
+    image: compliancePlatformImg,
     metrics: [
       { label: 'Reports', value: '5K+' },
       { label: 'Accuracy', value: '99.9%' }
@@ -64,6 +75,7 @@ const projects = [
     description: 'High-performance analytics platform processing millions of events per second with sub-second query response.',
     tags: ['Enterprise', 'Analytics', 'React', 'ClickHouse'],
     category: 'Enterprise',
+    image: analyticsDashboardImg,
     metrics: [
       { label: 'Events/sec', value: '10M+' },
       { label: 'Latency', value: '<100ms' }
