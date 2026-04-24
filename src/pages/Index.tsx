@@ -6,7 +6,7 @@ import { Section, SectionHeader } from '@/components/Section';
 import { MetricCard } from '@/components/MetricCard';
 import { ProjectCard } from '@/components/ProjectCard';
 import { FlowingLines } from '@/components/FlowingLines';
-import { MeshGradient, FloatingOrbs } from '@/components/BackgroundEffects';
+import { WeaveBackground } from '@/components/WeaveBackground';
 import { SectionDivider } from '@/components/VisualElements';
 import { Button } from '@/components/ui/button';
 import { fadeInUp, staggerContainer, staggerItem, viewportConfig, defaultTransition } from '@/lib/animations';
@@ -16,15 +16,12 @@ const Index = () => {
   return (
     <Layout>
       {/* Hero Section */}
-      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
-        {/* Mesh gradient background */}
-        <MeshGradient />
-        
-        {/* Floating orbs */}
-        <FloatingOrbs />
-        
+      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-secondary/40 via-background to-primary/5">
+        {/* Static multilayered weave background */}
+        <WeaveBackground />
+
         {/* Fade to next section */}
-        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-background to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-background to-transparent z-[1]" />
         
         <div className="relative max-w-7xl mx-auto px-6 lg:px-8 py-20 text-center">
           <motion.div
