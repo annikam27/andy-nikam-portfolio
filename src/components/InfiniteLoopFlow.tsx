@@ -1,5 +1,6 @@
 import { useState, useMemo, useId } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import type { LucideIcon } from 'lucide-react';
 import {
   Shuffle,
   Search,
@@ -21,7 +22,7 @@ type Stage = {
   description: string;
   metricLabel: string;
   metricValue: string;
-  icon: React.ComponentType<{ className?: string }>;
+  icon: LucideIcon;
   color: string; // node semantic color
   pathColor: string; // outgoing connection color (to next node)
 };
