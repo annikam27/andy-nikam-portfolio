@@ -480,7 +480,7 @@ const InfiniteLoopFlow = () => {
                     style={{ pointerEvents: 'none' }}
                   >
                     <div className="flex items-center justify-center w-full h-full">
-                      <Icon className="w-4 h-4" style={{ color: s.color }} />
+                      <Icon className="w-4 h-4" color={s.color} />
                     </div>
                   </foreignObject>
                 </g>
