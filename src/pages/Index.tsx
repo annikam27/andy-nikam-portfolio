@@ -11,6 +11,9 @@ import { SectionDivider } from '@/components/VisualElements';
 import { Button } from '@/components/ui/button';
 import { fadeInUp, staggerContainer, staggerItem, viewportConfig, defaultTransition } from '@/lib/animations';
 import InteractiveFlowDiagram from '@/components/InteractiveFlowDiagram';
+import financialCoachImg from '@/assets/projects/financial-coach.png';
+import flowpayImg from '@/assets/projects/flowpay.png';
+import webexChatbotImg from '@/assets/projects/webex-chatbot.png';
 
 const Index = () => {
   return (
@@ -161,6 +164,7 @@ const Index = () => {
             title="AI Financial Fitness Coach"
             description="Personalized AI-powered financial guidance helping users build better money habits."
             tags={['AI/ML', 'Fintech', 'React']}
+            image={financialCoachImg}
             metrics={[
               { label: 'Users', value: '50K+' },
               { label: 'Engagement', value: '+40%' }
@@ -170,6 +174,7 @@ const Index = () => {
             title="FlowPay Payment Platform"
             description="Modern payment infrastructure enabling seamless B2B transactions at scale."
             tags={['Fintech', 'Enterprise', 'API']}
+            image={flowpayImg}
             metrics={[
               { label: 'TPV', value: '$2B+' },
               { label: 'Merchants', value: '10K+' }
@@ -179,6 +184,7 @@ const Index = () => {
             title="WebEx AI Chatbot"
             description="Intelligent meeting assistant with real-time transcription and action items."
             tags={['AI/ML', 'Enterprise', 'NLP']}
+            image={webexChatbotImg}
             metrics={[
               { label: 'Meetings', value: '1M+' },
               { label: 'Accuracy', value: '95%' }
