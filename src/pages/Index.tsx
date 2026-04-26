@@ -10,7 +10,7 @@ import { WeaveBackground } from '@/components/WeaveBackground';
 import { SectionDivider } from '@/components/VisualElements';
 import { Button } from '@/components/ui/button';
 import { fadeInUp, staggerContainer, staggerItem, viewportConfig, defaultTransition } from '@/lib/animations';
-import InteractiveFlowDiagram from '@/components/InteractiveFlowDiagram';
+import InfiniteLoopFlow from '@/components/InfiniteLoopFlow';
 import financialCoachImg from '@/assets/projects/financial-coach.png';
 import flowpayImg from '@/assets/projects/flowpay.png';
 import webexChatbotImg from '@/assets/projects/webex-chatbot.png';
@@ -137,7 +137,7 @@ const Index = () => {
           subtitle="A systematic approach to transforming complex challenges into elegant solutions"
         />
         
-        <InteractiveFlowDiagram />
+        <InfiniteLoopFlow />
       </Section>
 
       {/* Section Divider */}
