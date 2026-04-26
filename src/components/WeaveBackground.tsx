@@ -164,14 +164,14 @@ export const WeaveBackground = () => {
         </defs>
 
         {/* Zone A — Top-Right ultraviolet cascade */}
-        <g style={{ mixBlendMode: 'screen', opacity: 0.55 }} filter="url(#neon-glow)">
+        <g style={{ mixBlendMode: 'multiply', opacity: 0.75 }} filter="url(#neon-glow)">
           {zoneA.map((p, i) => (
             <path
               key={`a-${i}`}
               d={p.d}
               stroke={p.stroke}
-              strokeWidth={p.sw}
-              strokeOpacity={p.op}
+              strokeWidth={p.sw + 0.6}
+              strokeOpacity={Math.min(0.9, p.op + 0.35)}
               fill="none"
               strokeLinecap="round"
             />
@@ -179,14 +179,14 @@ export const WeaveBackground = () => {
         </g>
 
         {/* Zone B — Top-Left catalyst spark */}
-        <g style={{ mixBlendMode: 'screen', opacity: 0.6 }} filter="url(#neon-glow)">
+        <g style={{ mixBlendMode: 'multiply', opacity: 0.8 }} filter="url(#neon-glow)">
           {zoneB.map((p, i) => (
             <path
               key={`b-${i}`}
               d={p.d}
               stroke={p.stroke}
-              strokeWidth={p.sw + 0.3}
-              strokeOpacity={p.op + 0.1}
+              strokeWidth={p.sw + 0.8}
+              strokeOpacity={Math.min(0.95, p.op + 0.4)}
               fill="none"
               strokeLinecap="round"
             />
@@ -194,7 +194,7 @@ export const WeaveBackground = () => {
         </g>
 
         {/* Zone C — Bottom full-width scaling flow */}
-        <g style={{ mixBlendMode: 'screen', opacity: 0.7 }} filter="url(#neon-soft)">
+        <g style={{ mixBlendMode: 'multiply', opacity: 0.85 }} filter="url(#neon-soft)">
           {zoneC.map((p, i) => {
             // Density gradient: right side gets stronger opacity & weight
             const tail = i / zoneC.length;
@@ -203,8 +203,8 @@ export const WeaveBackground = () => {
                 key={`c-${i}`}
                 d={p.d}
                 stroke={p.stroke}
-                strokeWidth={p.sw + tail * 0.6}
-                strokeOpacity={Math.min(0.85, p.op + tail * 0.25)}
+                strokeWidth={p.sw + 0.6 + tail * 0.8}
+                strokeOpacity={Math.min(0.95, p.op + 0.3 + tail * 0.25)}
                 fill="none"
                 strokeLinecap="round"
               />
@@ -236,13 +236,13 @@ export const WeaveBackground = () => {
         />
       </svg>
 
-      {/* Legibility cutout — radial fade behind copy column ~15% darker overlay
-          ensures text stays crisp when patterns drift behind it */}
+      {/* Legibility cutout — soft white halo ONLY behind the headline copy.
+          Kept tight so the three neon zones stay vivid. */}
       <div
-        className="absolute inset-0"
+        className="absolute inset-0 pointer-events-none"
         style={{
           background:
-            'radial-gradient(45% 28% at 50% 48%, rgba(255,255,255,0.55), transparent 70%)',
+            'radial-gradient(22% 14% at 50% 46%, rgba(255,255,255,0.75), rgba(255,255,255,0) 75%)',
         }}
       />
     </div>
