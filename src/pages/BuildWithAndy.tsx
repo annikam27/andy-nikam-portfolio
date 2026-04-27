@@ -1,16 +1,33 @@
 import { motion } from 'framer-motion';
-import { Play, BookOpen, Image, Send } from 'lucide-react';
+import { Play, BookOpen, Image as ImageIcon, Send, Heart, MessageCircle, Youtube, Instagram, ArrowRight } from 'lucide-react';
 import { Layout } from '@/components/Layout';
 import { Section, SectionHeader } from '@/components/Section';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Skeleton } from '@/components/ui/skeleton';
+import { useEffect, useState } from 'react';
 import { fadeInUp, staggerContainer, staggerItem, viewportConfig, defaultTransition } from '@/lib/animations';
 
-const videos = [
-  { title: 'Building AI Products from Scratch', views: '12.5K', duration: '15:42' },
-  { title: 'Product Metrics That Actually Matter', views: '8.3K', duration: '12:18' },
-  { title: 'From PM to Founder: Lessons Learned', views: '15.2K', duration: '20:05' },
+const featuredVideo = {
+  title: 'Building AI Products from Scratch',
+  views: '24.1K',
+  timestamp: '2 weeks ago',
+  duration: '18:24',
+};
+
+const recentVideos = [
+  { title: 'Product Metrics That Actually Matter', views: '12.5K', timestamp: '3 weeks ago', duration: '15:42' },
+  { title: 'From PM to Founder: Lessons Learned', views: '8.3K', timestamp: '1 month ago', duration: '12:18' },
+  { title: 'Why Most AI Features Fail (And How to Fix It)', views: '15.2K', timestamp: '2 months ago', duration: '20:05' },
 ];
+
+const instagramPosts = Array.from({ length: 8 }).map((_, i) => ({
+  id: i + 1,
+  likes: Math.floor(Math.random() * 800) + 200,
+  comments: Math.floor(Math.random() * 60) + 10,
+  // newest -> oldest, ordered already
+  caption: ['Studio session', 'Whiteboard war', 'AI sprint', 'Coffee + code', 'Product review', 'Cycling Sunday', 'Demo day', 'Team offsite'][i],
+}));
 
 const articles = [
   { title: 'The Art of Product Discovery in AI', platform: 'LinkedIn', date: 'Dec 2024' },
@@ -19,6 +36,13 @@ const articles = [
 ];
 
 const BuildWithAndy = () => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 600);
+    return () => clearTimeout(t);
+  }, []);
+
   return (
     <Layout>
       {/* Hero */}
@@ -43,71 +67,125 @@ const BuildWithAndy = () => {
       </section>
 
       {/* YouTube Section */}
-      <Section background="subtle">
-        <SectionHeader
-          title="YouTube"
-          subtitle="In-depth videos on product management and AI"
-        />
+      <section className="relative py-20 md:py-28 dot-pattern animate-fade-in">
+        <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-transparent to-background/60 pointer-events-none" />
+        <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="mb-12 text-center">
+            <h2 className="display-lg mb-4">YouTube</h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              In-depth videos on product management and AI
+            </p>
+          </div>
 
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={viewportConfig}
-          variants={fadeInUp}
-          transition={defaultTransition}
-          className="mb-12"
-        >
-          <a
-            href="https://www.youtube.com/@BuildWithPurpose-ai"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="relative block aspect-video max-w-4xl mx-auto bg-gradient-to-br from-primary/5 to-accent/5 rounded-3xl overflow-hidden shadow-elevated group cursor-pointer"
-          >
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-20 h-20 rounded-full bg-primary flex items-center justify-center shadow-glow group-hover:scale-110 transition-transform duration-300">
-                <Play className="w-8 h-8 text-primary-foreground ml-1" />
-              </div>
-            </div>
-            <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-foreground/80 to-transparent">
-              <h3 className="text-xl font-semibold text-background">Latest Video: Building AI Products from Scratch</h3>
-            </div>
-          </a>
-        </motion.div>
-
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={viewportConfig}
-          variants={staggerContainer}
-          className="grid grid-cols-1 md:grid-cols-3 gap-6"
-        >
-          {videos.map((video) => (
+          {/* Featured Player */}
+          {loading ? (
+            <Skeleton className="w-full max-w-5xl mx-auto aspect-video mb-10" style={{ borderRadius: 'var(--radius-3xl)', backgroundColor: 'var(--color-muted)' }} />
+          ) : (
             <motion.a
-              key={video.title}
               href="https://www.youtube.com/@BuildWithPurpose-ai"
               target="_blank"
               rel="noopener noreferrer"
-              variants={staggerItem}
-              className="group bg-card border border-border rounded-2xl overflow-hidden shadow-card hover:shadow-elevated transition-all duration-300"
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={viewportConfig}
+              transition={defaultTransition}
+              className="card group relative block aspect-video max-w-5xl mx-auto overflow-hidden mb-10"
+              style={{
+                borderRadius: 'var(--radius-3xl)',
+                boxShadow: 'var(--shadow-glow)',
+              }}
             >
-              <div className="relative aspect-video bg-gradient-to-br from-muted to-secondary flex items-center justify-center">
-                <div className="w-12 h-12 rounded-full bg-primary/90 flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <Play className="w-5 h-5 text-primary-foreground ml-0.5" />
+              {/* Placeholder thumbnail backdrop */}
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/15 via-accent/10 to-primary/5" />
+              <div className="absolute inset-0 dot-pattern-large opacity-30" />
+
+              {/* Play button */}
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div
+                  className="w-24 h-24 rounded-full flex items-center justify-center transition-transform duration-300 group-hover:scale-110"
+                  style={{ backgroundColor: 'hsl(var(--primary) / 0.2)', backdropFilter: 'blur(20px)' }}
+                >
+                  <div className="w-0 h-0 border-y-[14px] border-y-transparent border-l-[22px] border-l-white ml-2" />
                 </div>
-                <span className="absolute bottom-2 right-2 px-2 py-1 bg-foreground/80 text-background text-xs rounded">
-                  {video.duration}
-                </span>
               </div>
-              <div className="p-4">
-                <h4 className="font-medium text-foreground line-clamp-2 group-hover:text-primary transition-colors">
-                  {video.title}
-                </h4>
-                <p className="text-sm text-muted-foreground mt-1">{video.views} views</p>
+
+              {/* Bottom info */}
+              <div className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-background/95 via-background/70 to-transparent">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="label-xs">Latest Video</span>
+                  <span className="label-xs">• {featuredVideo.duration}</span>
+                </div>
+                <h3 className="metric-value text-2xl md:text-3xl font-bold mb-1">
+                  {featuredVideo.title}
+                </h3>
+                <p className="label-xs">{featuredVideo.views} views • {featuredVideo.timestamp}</p>
               </div>
             </motion.a>
-          ))}
-        </motion.div>
-      </Section>
+          )}
+
+          {/* Recents Gallery */}
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportConfig}
+            variants={staggerContainer}
+            className="grid grid-cols-1 md:grid-cols-3"
+            style={{ gap: 'var(--space-6)' }}
+          >
+            {(loading ? Array.from({ length: 3 }) : recentVideos).map((video, idx) => (
+              loading ? (
+                <Skeleton key={idx} className="aspect-[4/3]" style={{ borderRadius: 'var(--radius-2xl)', backgroundColor: 'var(--color-muted)' }} />
+              ) : (
+                <motion.a
+                  key={(video as typeof recentVideos[number]).title}
+                  href="https://www.youtube.com/@BuildWithPurpose-ai"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  variants={staggerItem}
+                  className="card glow-on-hover group overflow-hidden transition-transform duration-300 hover:-translate-y-1"
+                  style={{ borderRadius: 'var(--radius-2xl)' }}
+                >
+                  <div className="relative aspect-video bg-gradient-to-br from-muted to-secondary flex items-center justify-center overflow-hidden">
+                    <div className="absolute inset-0 dot-pattern opacity-40" />
+                    <div
+                      className="relative w-14 h-14 rounded-full flex items-center justify-center transition-transform group-hover:scale-110"
+                      style={{ backgroundColor: 'hsl(var(--primary) / 0.2)', backdropFilter: 'blur(20px)' }}
+                    >
+                      <div className="w-0 h-0 border-y-[8px] border-y-transparent border-l-[13px] border-l-white ml-1" />
+                    </div>
+                    <span className="absolute bottom-2 right-2 px-2 py-1 text-xs rounded-md text-white" style={{ backgroundColor: 'hsl(var(--foreground) / 0.75)' }}>
+                      {(video as typeof recentVideos[number]).duration}
+                    </span>
+                  </div>
+                  <div className="p-5">
+                    <h4 className="font-semibold text-foreground line-clamp-2 mb-3 group-hover:text-primary transition-colors">
+                      {(video as typeof recentVideos[number]).title}
+                    </h4>
+                    <div className="flex items-center gap-2">
+                      <span className="label-xs">{(video as typeof recentVideos[number]).views} views</span>
+                      <span className="label-xs">•</span>
+                      <span className="label-xs">{(video as typeof recentVideos[number]).timestamp}</span>
+                    </div>
+                  </div>
+                </motion.a>
+              )
+            ))}
+          </motion.div>
+
+          <div className="mt-12 flex justify-center">
+            <a
+              href="https://www.youtube.com/@BuildWithPurpose-ai"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-outline"
+            >
+              <Youtube className="w-4 h-4" />
+              View All on YouTube
+              <ArrowRight className="w-4 h-4" />
+            </a>
+          </div>
+        </div>
+      </section>
 
       {/* LinkedIn Articles */}
       <Section>
@@ -147,39 +225,85 @@ const BuildWithAndy = () => {
         </motion.div>
       </Section>
 
-      {/* Instagram Feed */}
-      <Section background="subtle">
-        <SectionHeader
-          title="Instagram"
-          subtitle="Behind the scenes and daily moments"
-        />
+      {/* Instagram Section */}
+      <section className="relative py-20 md:py-28 dot-pattern animate-fade-in">
+        <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-transparent to-background/60 pointer-events-none" />
+        <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="mb-12 text-center">
+            <h2 className="display-lg mb-4">Instagram</h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Behind the scenes and daily moments
+            </p>
+          </div>
 
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={viewportConfig}
-          variants={staggerContainer}
-          className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto"
-        >
-          {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-            <motion.a
-              key={i}
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportConfig}
+            variants={staggerContainer}
+            className="grid grid-cols-2 md:grid-cols-4 max-w-5xl mx-auto"
+            style={{ gap: 'var(--space-4)' }}
+          >
+            {(loading ? Array.from({ length: 8 }) : instagramPosts).map((post, idx) => (
+              loading ? (
+                <Skeleton key={idx} className="aspect-square" style={{ borderRadius: 'var(--radius-2xl)', backgroundColor: 'var(--color-muted)' }} />
+              ) : (
+                <motion.a
+                  key={(post as typeof instagramPosts[number]).id}
+                  href="https://www.instagram.com/build.with.andy/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  variants={staggerItem}
+                  className="card glow-on-hover group relative aspect-square overflow-hidden cursor-pointer"
+                  style={{ borderRadius: 'var(--radius-2xl)' }}
+                >
+                  {/* Placeholder image */}
+                  <div
+                    className="absolute inset-0"
+                    style={{
+                      background: `linear-gradient(${135 + idx * 22}deg, hsl(${(idx * 47) % 360} 60% 70% / 0.5), hsl(${(idx * 47 + 80) % 360} 70% 60% / 0.5))`,
+                    }}
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <ImageIcon className="w-8 h-8 text-white/60" />
+                  </div>
+
+                  {/* Hover overlay */}
+                  <div
+                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-3"
+                    style={{
+                      backgroundColor: 'hsl(var(--foreground) / 0.55)',
+                      backdropFilter: 'blur(20px)',
+                    }}
+                  >
+                    <span className="tag" style={{ backgroundColor: 'hsl(var(--background) / 0.9)' }}>
+                      <Heart className="w-3.5 h-3.5" />
+                      {(post as typeof instagramPosts[number]).likes}
+                    </span>
+                    <span className="tag" style={{ backgroundColor: 'hsl(var(--background) / 0.9)' }}>
+                      <MessageCircle className="w-3.5 h-3.5" />
+                      {(post as typeof instagramPosts[number]).comments}
+                    </span>
+                  </div>
+                </motion.a>
+              )
+            ))}
+          </motion.div>
+
+          <div className="mt-12 flex justify-center">
+            <a
               href="https://www.instagram.com/build.with.andy/"
               target="_blank"
               rel="noopener noreferrer"
-              variants={staggerItem}
-              className="group relative aspect-square bg-gradient-to-br from-muted to-secondary rounded-xl overflow-hidden cursor-pointer"
+              className="btn-outline"
             >
-              <div className="absolute inset-0 flex items-center justify-center">
-                <Image className="w-8 h-8 text-muted-foreground/50" />
-              </div>
-              <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                <span className="text-primary-foreground text-sm font-medium">View</span>
-              </div>
-            </motion.a>
-          ))}
-        </motion.div>
-      </Section>
+              <Instagram className="w-4 h-4" />
+              Follow on Instagram
+              <ArrowRight className="w-4 h-4" />
+            </a>
+          </div>
+        </div>
+      </section>
 
       {/* Newsletter */}
       <Section>
