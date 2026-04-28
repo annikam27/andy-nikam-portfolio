@@ -8,6 +8,14 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { useEffect, useState } from 'react';
 import { fadeInUp, staggerContainer, staggerItem, viewportConfig, defaultTransition } from '@/lib/animations';
 
+// Open external URL in a new tab, falling back to same-tab navigation
+// when the preview iframe blocks popups.
+const openExternal = (url: string) => (e: React.MouseEvent) => {
+  e.preventDefault();
+  const win = window.open(url, '_blank', 'noopener,noreferrer');
+  if (!win) window.top ? (window.top.location.href = url) : (window.location.href = url);
+};
+
 const featuredVideo = {
   title: 'Building AI Products from Scratch',
   views: '24.1K',
