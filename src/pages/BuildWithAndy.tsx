@@ -90,7 +90,7 @@ const BuildWithAndy = () => {
             <Skeleton className="w-full max-w-5xl mx-auto aspect-video mb-10" style={{ borderRadius: 'var(--radius-3xl)', backgroundColor: 'var(--color-muted)' }} />
           ) : (
             <motion.a
-              href="https://www.youtube.com/@BuildWithPurpose-ai"
+              href="https://www.youtube.com/@BuildWithPurpose-ai" onClick={openExternal("https://www.youtube.com/@BuildWithPurpose-ai")}
               target="_blank"
               rel="noopener noreferrer"
               initial={{ opacity: 0, y: 24 }}
@@ -146,7 +146,7 @@ const BuildWithAndy = () => {
               ) : (
                 <motion.a
                   key={(video as typeof recentVideos[number]).title}
-                  href="https://www.youtube.com/@BuildWithPurpose-ai"
+                  href="https://www.youtube.com/@BuildWithPurpose-ai" onClick={openExternal("https://www.youtube.com/@BuildWithPurpose-ai")}
                   target="_blank"
                   rel="noopener noreferrer"
                   variants={staggerItem}
@@ -182,7 +182,7 @@ const BuildWithAndy = () => {
 
           <div className="mt-12 flex justify-center">
             <a
-              href="https://www.youtube.com/@BuildWithPurpose-ai"
+              href="https://www.youtube.com/@BuildWithPurpose-ai" onClick={openExternal("https://www.youtube.com/@BuildWithPurpose-ai")}
               target="_blank"
               rel="noopener noreferrer"
               className="btn-outline"
@@ -258,7 +258,7 @@ const BuildWithAndy = () => {
               ) : (
                 <motion.a
                   key={(post as typeof instagramPosts[number]).id}
-                  href="https://www.instagram.com/build.with.andy/"
+                  href="https://www.instagram.com/build.with.andy/" onClick={openExternal("https://www.instagram.com/build.with.andy/")}
                   target="_blank"
                   rel="noopener noreferrer"
                   variants={staggerItem}
@@ -300,7 +300,7 @@ const BuildWithAndy = () => {
 
           <div className="mt-12 flex justify-center">
             <a
-              href="https://www.instagram.com/build.with.andy/"
+              href="https://www.instagram.com/build.with.andy/" onClick={openExternal("https://www.instagram.com/build.with.andy/")}
               target="_blank"
               rel="noopener noreferrer"
               className="btn-outline"
